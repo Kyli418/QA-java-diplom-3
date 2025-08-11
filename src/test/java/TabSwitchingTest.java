@@ -17,21 +17,16 @@ public class TabSwitchingTest {
     private StellarBurgerClientService client;
     private String token;
     private UserSteps userSteps;
-    private RegistrationPage registrationPage;
     private RegistrationTestData registrationTestData;
-    ;
     private UserData userData;
     private MainPage mainPage;
     private AuthorizationPage authorizationPage;
-    private ProfilePage profilePage;
 
     @BeforeEach
     public void setUp() {
         driver = WebDrivers.createDriver();
-        registrationPage = new RegistrationPage(driver);
         authorizationPage = new AuthorizationPage(driver);
         mainPage = new MainPage(driver);
-        profilePage = new ProfilePage(driver);
         userSteps = new UserSteps();
         client = userSteps.createClient();
 
@@ -46,14 +41,29 @@ public class TabSwitchingTest {
         authorizationPage.clickButtonAuth();
     }
 
-    @DisplayName("Проверка перехода между табами")
+    @DisplayName("Проверка, что по умолчанию выбран таб Булки")
     @Test
-    public void tabSwitchingTest() {
+    public void tabDefaultTest() {
         mainPage.checkActiveTab(mainPage.getBun());
+    }
 
+    @DisplayName("Проверка перехода на таб соусы")
+    @Test
+    public void checkSwitchTabSauces(){
         mainPage.clickTabSauce();
         mainPage.checkActiveTab(mainPage.getSauce());
+    }
 
+    @DisplayName("Проверка перехода на таб Начинки")
+    @Test
+    public void checkSwitchTabFilling(){
+        mainPage.clickTabFilling();
+        mainPage.checkActiveTab(mainPage.getFilling());
+    }
+
+    @DisplayName("Проверка перехода на таб Булки")
+    @Test
+    public void checkSwitchTabBun(){
         mainPage.clickTabFilling();
         mainPage.checkActiveTab(mainPage.getFilling());
 

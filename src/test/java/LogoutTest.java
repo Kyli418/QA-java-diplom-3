@@ -11,7 +11,6 @@ import org.openqa.selenium.WebDriver;
 import web.WebDrivers;
 
 import static PageObjects.AuthorizationPage.URL_PAGE_AUTHORIZATION;
-import static PageObjects.ProfilePage.PROFILE_PAGE_URL;
 
 public class LogoutTest {
 
@@ -19,7 +18,6 @@ public class LogoutTest {
     private StellarBurgerClientService client;
     private String token;
     private UserSteps userSteps;
-    private RegistrationPage registrationPage;
     private RegistrationTestData registrationTestData;;
     private UserData userData;
     private MainPage mainPage;
@@ -29,7 +27,6 @@ public class LogoutTest {
     @BeforeEach
     public void setUp(){
         driver = WebDrivers.createDriver();
-        registrationPage = new RegistrationPage(driver);
         authorizationPage = new AuthorizationPage(driver);
         mainPage = new MainPage(driver);
         profilePage = new ProfilePage(driver);

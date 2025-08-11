@@ -18,7 +18,6 @@ public class OpenProfileTest {
     private StellarBurgerClientService client;
     private String token;
     private UserSteps userSteps;
-    private RegistrationPage registrationPage;
     private RegistrationTestData registrationTestData;;
     private UserData userData;
     private MainPage mainPage;
@@ -28,7 +27,6 @@ public class OpenProfileTest {
     @BeforeEach
     public void setUp(){
         driver = WebDrivers.createDriver();
-        registrationPage = new RegistrationPage(driver);
         authorizationPage = new AuthorizationPage(driver);
         mainPage = new MainPage(driver);
         profilePage = new ProfilePage(driver);
