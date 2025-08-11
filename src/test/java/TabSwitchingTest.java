@@ -1,0 +1,85 @@
+import PageObjects.*;
+import api.client.StellarBurgerClientService;
+import api.client.UserData;
+import api.steps.UserSteps;
+import io.restassured.response.ValidatableResponse;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.openqa.selenium.WebDriver;
+import web.WebDrivers;
+
+import static PageObjects.AuthorizationPage.URL_PAGE_AUTHORIZATION;
+
+public class TabSwitchingTest {
+    private WebDriver driver;
+    private StellarBurgerClientService client;
+    private String token;
+    private UserSteps userSteps;
+    private RegistrationTestData registrationTestData;
+    private UserData userData;
+    private MainPage mainPage;
+    private AuthorizationPage authorizationPage;
+
+    @BeforeEach
+    public void setUp() {
+        driver = WebDrivers.createDriver();
+        authorizationPage = new AuthorizationPage(driver);
+        mainPage = new MainPage(driver);
+        userSteps = new UserSteps();
+        client = userSteps.createClient();
+
+        registrationTestData = RegistrationTestData.getValidUser();
+        userData = new UserData(registrationTestData.email, registrationTestData.name, registrationTestData.password);
+        ValidatableResponse response = userSteps.requestCreateUser(client, userData);
+        token = userSteps.getAccessToken(response);
+
+        mainPage.openWebDrivers(URL_PAGE_AUTHORIZATION);
+        authorizationPage.inputEmail(registrationTestData.email);
+        authorizationPage.inputPassword(registrationTestData.password);
+        authorizationPage.clickButtonAuth();
+    }
+
+    @DisplayName("Проверка, что по умолчанию выбран таб Булки")
+    @Test
+    public void tabDefaultTest() {
+        mainPage.checkActiveTab(mainPage.getBun());
+    }
+
+    @DisplayName("Проверка перехода на таб соусы")
+    @Test
+    public void checkSwitchTabSauces(){
+        mainPage.clickTabSauce();
+        mainPage.checkActiveTab(mainPage.getSauce());
+    }
+
+    @DisplayName("Проверка перехода на таб Начинки")
+    @Test
+    public void checkSwitchTabFilling(){
+        mainPage.clickTabFilling();
+        mainPage.checkActiveTab(mainPage.getFilling());
+    }
+
+    @DisplayName("Проверка перехода на таб Булки")
+    @Test
+    public void checkSwitchTabBun(){
+        mainPage.clickTabFilling();
+        mainPage.checkActiveTab(mainPage.getFilling());
+
+        mainPage.clickTabBun();
+        mainPage.checkActiveTab(mainPage.getBun());
+    }
+
+    @AfterEach
+    public void after(){
+        driver.quit();
+        if (token == null){
+            System.out.println("Пользователь не был создан. Или токен не получен. Удаление невозможно.");
+            return;
+        }
+        client.deleteUser(token);
+    }
+}
+
+
